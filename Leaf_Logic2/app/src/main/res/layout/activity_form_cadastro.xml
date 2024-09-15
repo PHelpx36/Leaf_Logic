@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        tools:context=".FormCadastro">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/planta_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name"/>
+
+        <TextView
+            android:id="@+id/text_appname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+        <View
+            android:id="@+id/ContainerComponents"
+            style="@style/ContainerComponents"
+            android:layout_height="320dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_appname" />
+
+        <EditText
+            android:id="@+id/nome"
+            style="@style/Edit_Text"
+            android:hint="@string/nome"
+            android:maxLength="25"
+            android:drawableEnd="@drawable/icon_name"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintTop_toTopOf="@id/ContainerComponents"
+            android:importantForAutofill="no"/>
+
+        <View
+            android:id="@+id/barra_nome"
+            style="@style/Barra"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nome"
+            android:layout_width="match_parent"/>
+
+        <EditText
+            android:id="@+id/email"
+            style="@style/Edit_Text"
+            android:hint="@string/email"
+            android:drawableEnd="@drawable/icon_email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintStart_toStartOf="@id/ContainerComponents"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintTop_toBottomOf="@+id/nome"
+            android:importantForAutofill="no"/>
+
+        <View
+            android:id="@+id/barra_email"
+            style="@style/Barra"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email"
+            android:layout_width="match_parent"/>
+
+        <EditText
+            android:id="@+id/senha"
+            style="@style/Edit_Text"
+            android:hint="@string/senha"
+            android:maxLength="25"
+            android:drawableEnd="@drawable/icon_eye"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="@id/ContainerComponents"
+            app:layout_constraintStart_toStartOf="@+id/ContainerComponents"
+            app:layout_constraintTop_toBottomOf="@id/email"
+            android:importantForAutofill="no"/>
+
+        <View
+            android:id="@+id/barra_senha"
+            style="@style/Barra"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/senha"
+            android:layout_width="match_parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            style="@style/Button"
+            android:text="@string/cadastrar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/senha"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="@string/BemVindo"
+            android:textColor="@color/opacity_text"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/ContainerComponents"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_appname" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/spinner">
+
+            <TextView
+                android:id="@+id/textoRodape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tem_conta"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/voltaLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/entrar"
+                android:textColor="@color/light_purple"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            android:indeterminateTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ContainerComponents"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

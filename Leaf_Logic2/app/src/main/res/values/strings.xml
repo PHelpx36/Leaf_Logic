@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Leaf Logic</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Leaf Logic</string>
+    <string name="nav_header_subtitle">user.name@leaflogic.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="entrar">Entrar</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="email">Email</string>
+    <string name="senha">Senha</string>
+    <string name="nome">Nome</string>
+    <string name="possui_cadastro">Não possui cadastro?</string>
+    <string name="tem_conta">Tem uma conta?</string>
+    <string name="Ola">Olá! Que bom ver você de novo.</string>
+    <string name="BemVindo">Olá! Seja muito bem-vindo!</string>
+    <string name="lb_listaFilmes">Lista de Filmes Séries</string>
+    <string name="Pesquisar">Pesquisar</string>
+</resources>
