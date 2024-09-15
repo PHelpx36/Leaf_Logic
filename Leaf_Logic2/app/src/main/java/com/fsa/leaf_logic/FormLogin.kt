@@ -42,7 +42,7 @@ class FormLogin : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     view.spinner.visibility = View.INVISIBLE
                 }, 2000)
-                telaMovieMenu()
+                telaMenu()
                 Toast.makeText(this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Credenciais inválidas!", Toast.LENGTH_SHORT).show()
@@ -53,8 +53,8 @@ class FormLogin : AppCompatActivity() {
         }
     }
 
-    private fun telaMovieMenu() {
-        //startActivity(Intent(this, MovieMenu::class.java).apply { putExtra("userId", db.getUserIdByName(view.email.text.toString())) })
+    private fun telaMenu() {
+        startActivity(Intent(this, MainActivity::class.java).apply { putExtra("userId", db.getUserIdByName(view.email.text.toString())) })
     }
     private fun telaCadastro() {
         startActivity(Intent(this, FormCadastro::class.java))
