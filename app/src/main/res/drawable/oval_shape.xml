@@ -1,0 +1,15 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!-- Interior transparente -->
+    <solid android:color="#00000000" /> <!-- Transparente -->
+
+    <!-- Definir a borda -->
+    <stroke
+        android:width="8dp"
+        android:color="@color/black" /> <!-- Cor da borda -->
+
+    <!-- Tamanho opcional do círculo -->
+    <size
+        android:width="200dp"
+        android:height="200dp" />
+</shape>
