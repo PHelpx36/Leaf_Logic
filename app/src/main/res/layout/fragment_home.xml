@@ -7,54 +7,18 @@
     android:background="@drawable/background"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/notify_sign"
-        android:layout_width="376dp"
-        android:layout_height="189dp"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/retangular_shape"
-        android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
+    <LinearLayout
+        android:id="@+id/dynamicContainer"
+        android:layout_width="368dp"
+        android:layout_height="221dp"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plus_sign" />
-
-    <TextView
-        android:id="@+id/notify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Notification 1"
-        android:textColor="#000000"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="@+id/notify_sign"
-        app:layout_constraintStart_toStartOf="@+id/notify_sign"
-        app:layout_constraintTop_toTopOf="@+id/notify_sign" />
-
-    <TextView
-        android:id="@+id/notify1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Notification 2"
-        android:textColor="#000000"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="@+id/notify_sign"
-        app:layout_constraintStart_toStartOf="@+id/notify_sign"
-        app:layout_constraintTop_toBottomOf="@+id/notify" />
-
-    <TextView
-        android:id="@+id/allNotifications"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="ver mais"
-        android:textColor="#000000"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="@+id/notify_sign"
-        app:layout_constraintStart_toStartOf="@+id/notify_sign"
-        app:layout_constraintTop_toBottomOf="@+id/notify1" />
 
     <TextView
         android:id="@+id/textViewPlanta1"

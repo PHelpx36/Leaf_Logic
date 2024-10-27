@@ -6,7 +6,7 @@
     <!-- Definir a borda -->
     <stroke
         android:width="8dp"
-        android:color="@color/black" /> <!-- Cor da borda -->
+        android:color="@color/white" /> <!-- Cor da borda -->
 
     <!-- Tamanho opcional do círculo -->
     <size
