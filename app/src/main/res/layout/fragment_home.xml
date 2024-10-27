@@ -1,51 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@drawable/background"
     tools:context=".ui.home.HomeFragment">
 
-    <LinearLayout
-        android:id="@+id/dynamicContainer"
-        android:layout_width="368dp"
-        android:layout_height="221dp"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plus_sign" />
-
-    <TextView
-        android:id="@+id/textViewPlanta1"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="@string/nova_planta"
-        android:textColor="#000000"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/plus_sign"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@drawable/background"
+        tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/plus_sign"
-        android:layout_width="309dp"
-        android:layout_height="354dp"
-        android:background="@drawable/oval_shape"
-        android:gravity="center"
-        android:text="+"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.339" />
+        <LinearLayout
+            android:id="@+id/dynamicContainer"
+            android:layout_width="368dp"
+            android:layout_height="221dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/plus_sign" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textViewPlanta1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/nova_planta"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/plus_sign"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/plus_sign"
+            android:layout_width="309dp"
+            android:layout_height="354dp"
+            android:background="@drawable/oval_shape"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.339">
+
+            <!-- Texto centralizado sobre a imagem -->
+            <TextView
+                android:id="@+id/text_inside_plus_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nova_planta_placeholder"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+            <!-- Imagem centralizada -->
+            <ImageView
+                android:id="@+id/image_inside_plus_sign"
+                android:layout_width="276dp"
+                android:layout_height="320dp"
+                android:layout_gravity="center"
+                android:background="@drawable/planta_icon" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

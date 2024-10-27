@@ -26,4 +26,5 @@
     <string name="nome_da_planta">Nome da Planta</string>
     <string name="especie">Espécie</string>
     <string name="nova_planta">Nova PLanta</string>
+    <string name="nova_planta_placeholder">Nova Planta</string>
 </resources>
