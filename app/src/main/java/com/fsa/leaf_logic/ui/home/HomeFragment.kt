@@ -6,18 +6,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.fsa.leaf_logic.R
 import com.fsa.leaf_logic.databinding.FragmentHomeBinding
-import com.fsa.leaf_logic.databinding.FragmentNovaPlantaBinding
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -79,7 +74,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     setTextColor(Color.WHITE)
                     setBackgroundResource(R.drawable.button)
                     gravity = Gravity.CENTER
-                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_history, 0, 0, 0)
                     setPadding(25, 15, 25, 15) // Padding para afastar o texto das bordas
                     setOnClickListener {
                         findNavController().navigate(R.id.action_nav_home_to_nav_slideshow)

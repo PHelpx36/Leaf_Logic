@@ -10,6 +10,9 @@ import retrofit2.http.Path
 
 interface ApiService {
 
+    @GET("api/Leitura") // Rota da API
+    suspend fun getLeituras(): List<Leitura>
+
     @GET("api/Usuarios")
     suspend fun getUsuarios(): Response<List<User>>
 
