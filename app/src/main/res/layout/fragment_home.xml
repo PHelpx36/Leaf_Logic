@@ -29,7 +29,7 @@
             app:layout_constraintTop_toBottomOf="@+id/plus_sign" />
 
         <TextView
-            android:id="@+id/textViewPlanta1"
+            android:id="@+id/nome_planta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -53,23 +53,23 @@
             app:layout_constraintVertical_bias="0.339">
 
             <!-- Texto centralizado sobre a imagem -->
+
+            <!-- Imagem centralizada -->
             <TextView
                 android:id="@+id/text_inside_plus_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/nova_planta_placeholder"
                 android:textColor="#FFFFFF"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:layout_gravity="center"/>
+                android:textSize="30sp" />
 
-            <!-- Imagem centralizada -->
             <ImageView
                 android:id="@+id/image_inside_plus_sign"
                 android:layout_width="276dp"
                 android:layout_height="320dp"
-                android:layout_gravity="center"
-                android:background="@drawable/planta_icon" />
+                android:layout_gravity="center" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

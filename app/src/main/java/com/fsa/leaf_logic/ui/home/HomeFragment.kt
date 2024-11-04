@@ -8,11 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.fsa.leaf_logic.R
+import com.fsa.leaf_logic.RetrofitClient
+import com.fsa.leaf_logic.UserViewModel
 import com.fsa.leaf_logic.databinding.FragmentHomeBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -37,13 +47,73 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             findNavController().navigate(R.id.action_nav_home_to_nav_novaPlanta)
         }
 
+        val userViewModel: UserViewModel by activityViewModels()
+
+        userViewModel.userId.value?.let { pesquisarPlantaPorUserId(it) }
+
         val imageView = binding.imageInsidePlusSign
 
         // Defina a imagem dinamicamente
         imageView.setImageResource(R.drawable.planta_icon) // Substitua pelo seu drawable
 
-        val dynamicContainer = binding.dynamicContainer
+        notifications()
 
+        return binding.root
+    }
+
+    private fun pesquisarPlantaPorUserId(userId: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Chama o endpoint da API para obter as leituras
+                val response = RetrofitClient.apiService.getPlantasPorUserId(userId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isNotEmpty()) {
+                        // Exibe uma mensagem de sucesso
+                        Toast.makeText(
+                            requireContext(),
+                            "Plantas carregadas!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        loadPlantas()
+
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Nenhuma leitura encontrada",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Erro de rede: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Erro: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun loadPlantas(){
+
+    }
+
+    private fun notifications(){
+        val dynamicContainer = binding.dynamicContainer
         // Adicionar componentes dinamicamente
         for (i in 1..4) {
             val textView = TextView(requireContext())
@@ -74,7 +144,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     setTextColor(Color.WHITE)
                     setBackgroundResource(R.drawable.button)
                     gravity = Gravity.CENTER
-                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_history, 0, 0, 0)
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
                     setPadding(25, 15, 25, 15) // Padding para afastar o texto das bordas
                     setOnClickListener {
                         findNavController().navigate(R.id.action_nav_home_to_nav_slideshow)
@@ -94,8 +164,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             // Adiciona os componentes ao LinearLayout
             dynamicContainer.addView(textView)
         }
-
-        return binding.root
     }
 
     override fun onDestroyView() {

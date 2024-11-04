@@ -53,7 +53,9 @@ class FormLogin : AppCompatActivity() {
                         0,
                         "Teste",
                         "teste@example.com",
-                        "123"
+                        "123",
+                        "",
+                        ""
                     )
 
                     telaMenu(user)
@@ -80,6 +82,8 @@ class FormLogin : AppCompatActivity() {
                                         usuario?.id ?: 0,
                                         usuario?.nome ?: "",
                                         usuario?.email ?: "",
+                                        "",
+                                        "",
                                         ""
                                     )
 

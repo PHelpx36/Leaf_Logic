@@ -18,6 +18,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class FormCadastro : AppCompatActivity() {
 
@@ -45,7 +48,13 @@ class FormCadastro : AppCompatActivity() {
             val email = view.email.text.toString()
             val senha = view.senha.text.toString()
 
-            val user = User(nome = nome, email = email, senha = senha)
+            val user = User(
+                nome = nome,
+                email = email,
+                senha = senha,
+                dataCadastro = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(Calendar.getInstance().time),
+                dataUpdate = ""
+            )
 
             if(user.nome != "" && user.email != "" && user.senha != ""){
                 view.spinner.visibility = View.VISIBLE

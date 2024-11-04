@@ -27,4 +27,6 @@
     <string name="especie">Espécie</string>
     <string name="nova_planta">Nova PLanta</string>
     <string name="nova_planta_placeholder">Nova Planta</string>
+    <string name="nome_do_vaso">Nome do Vaso</string>
+    <string name="nome_encontrar_vaso">*Nome do encontrado na base do Vaso</string>
 </resources>

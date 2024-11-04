@@ -3,6 +3,7 @@ package com.fsa.leaf_logic
 import android.os.Bundle
 import android.view.Menu
 import android.widget.TextView
+import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -15,10 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.fsa.leaf_logic.databinding.ActivityMainBinding
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity() {
+class
+MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var view: ActivityMainBinding
+    private lateinit var userIdTextView: TextView
     private lateinit var userNameTextView: TextView
     private lateinit var userEmailTextView: TextView
 
@@ -37,17 +40,27 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
+
         val drawerLayout: DrawerLayout = view.drawerLayout
         val navView: NavigationView = view.navView
-
         val headerView = navView.getHeaderView(0)
+        userIdTextView = headerView.findViewById(R.id.user_id)
         userNameTextView = headerView.findViewById(R.id.user_name)
         userEmailTextView = headerView.findViewById(R.id.email_side)
 
         //Passando nome do user para tela
         user?.let {
+            userIdTextView.text = it.id.toString()
             userNameTextView.text = it.nome
             userEmailTextView.text = it.email
+        }
+
+        val userViewModel: UserViewModel by viewModels()
+
+        user?.let {
+            userViewModel.userId.value = it.id.toString()
+            userViewModel.userName.value = it.nome
+            userViewModel.userEmail.value = it.email
         }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)

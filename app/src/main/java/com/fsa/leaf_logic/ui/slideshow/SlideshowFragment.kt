@@ -123,7 +123,7 @@ class SlideshowFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Chama o endpoint da API para obter as leituras
-                val response = RetrofitClient.apiService.getLeituras()
+                val response = RetrofitClient.apiService.getLeiturasPorEquipamento("1")
 
                 withContext(Dispatchers.Main) {
                     if (response.isNotEmpty()) {
