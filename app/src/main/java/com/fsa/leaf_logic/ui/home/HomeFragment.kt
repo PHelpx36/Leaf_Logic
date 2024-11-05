@@ -1,7 +1,10 @@
 package com.fsa.leaf_logic.ui.home
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Base64
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.fsa.leaf_logic.PlantPagerAdapter
+import com.fsa.leaf_logic.Planta
 import com.fsa.leaf_logic.R
 import com.fsa.leaf_logic.RetrofitClient
 import com.fsa.leaf_logic.UserViewModel
@@ -37,9 +42,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // Use binding para acessar a View corretamente
@@ -50,11 +52,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val userViewModel: UserViewModel by activityViewModels()
 
         userViewModel.userId.value?.let { pesquisarPlantaPorUserId(it) }
-
-        val imageView = binding.imageInsidePlusSign
-
-        // Defina a imagem dinamicamente
-        imageView.setImageResource(R.drawable.planta_icon) // Substitua pelo seu drawable
 
         notifications()
 
@@ -76,7 +73,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        loadPlantas()
+                        loadPlantas(response)
 
                     } else {
                         Toast.makeText(
@@ -99,6 +96,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     Toast.makeText(requireContext(), "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
+                loadbutton()
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Erro: ${e.message}", Toast.LENGTH_SHORT)
@@ -108,9 +106,54 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun loadPlantas(){
+    private fun loadbutton() {
+        binding.viewPager.visibility = View.GONE
+        binding.nomePlanta.visibility = View.VISIBLE
+        binding.plusSign.visibility = View.VISIBLE // Certifique-se de que você tenha este ID
 
+        // Configurar o clique no botão para ir para a tela de cadastro
+        binding.plusSign.setOnClickListener {
+            // Navegar para a tela de cadastro (substitua com sua lógica de navegação)
+            findNavController().navigate(R.id.action_nav_home_to_nav_novaPlanta)
+        }
     }
+
+    private fun loadPlantas(plantas: List<Planta>) {
+        if (plantas.isEmpty()) {
+            // Exibir o botão para cadastro
+            binding.viewPager.visibility = View.GONE
+            binding.nomePlanta.visibility = View.VISIBLE
+            binding.plusSign.visibility = View.VISIBLE // Certifique-se de que você tenha este ID
+
+            // Configurar o clique no botão para ir para a tela de cadastro
+            binding.plusSign.setOnClickListener {
+                // Navegar para a tela de cadastro (substitua com sua lógica de navegação)
+                findNavController().navigate(R.id.action_nav_home_to_nav_novaPlanta)
+            }
+        } else {
+            // Ocultar o botão de cadastro
+            binding.nomePlanta.visibility = View.GONE
+            binding.plusSign.visibility = View.GONE
+
+            // Exibir o carrossel
+            val adapter = PlantPagerAdapter(plantas)
+            binding.viewPager.adapter = adapter
+
+            binding.nextButton.setOnClickListener {
+                if (binding.viewPager.currentItem < plantas.size - 1) {
+                    binding.viewPager.currentItem += 1
+                }
+            }
+
+            binding.prevButton.setOnClickListener {
+                if (binding.viewPager.currentItem > 0) {
+                    binding.viewPager.currentItem -= 1
+                }
+            }
+        }
+    }
+
+
 
     private fun notifications(){
         val dynamicContainer = binding.dynamicContainer

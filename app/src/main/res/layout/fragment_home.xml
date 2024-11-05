@@ -15,19 +15,6 @@
         android:background="@drawable/background"
         tools:context=".ui.home.HomeFragment">
 
-        <LinearLayout
-            android:id="@+id/dynamicContainer"
-            android:layout_width="368dp"
-            android:layout_height="221dp"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/plus_sign" />
-
         <TextView
             android:id="@+id/nome_planta"
             android:layout_width="wrap_content"
@@ -36,6 +23,7 @@
             android:text="@string/nova_planta"
             android:textColor="#000000"
             android:textSize="25sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/plus_sign"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -46,6 +34,7 @@
             android:layout_width="309dp"
             android:layout_height="354dp"
             android:background="@drawable/oval_shape"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,10 +56,55 @@
 
             <ImageView
                 android:id="@+id/image_inside_plus_sign"
-                android:layout_width="276dp"
-                android:layout_height="320dp"
+                android:layout_width="309dp"
+                android:layout_height="354dp"
                 android:layout_gravity="center" />
         </FrameLayout>
+
+        <!-- Setas de navegação -->
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="397dp"
+            android:layout_height="634dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.494" />
+
+        <ImageView
+            android:id="@+id/prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/dynamicContainer"
+            android:layout_width="368dp"
+            android:layout_height="221dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/plus_sign" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

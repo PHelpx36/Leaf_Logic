@@ -9,6 +9,7 @@ data class Planta(
     val nome: String,
     val especie: String,
     val descricao: String,
+    val imagem: String,
     val dataCadastro: String,
     val dataUpdate: String
 ): Serializable

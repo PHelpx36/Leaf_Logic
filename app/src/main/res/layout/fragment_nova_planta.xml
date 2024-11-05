@@ -128,6 +128,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+        <ImageView
+            android:id="@+id/imagemPlanta"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Imagem da planta"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_menu_camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/especies" />
+
         <View
             android:id="@+id/barra_especies"
             style="@style/Barra"
@@ -142,7 +155,7 @@
             android:text="@string/cadastrar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/especies" />
+            app:layout_constraintTop_toBottomOf="@+id/imagemPlanta" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -39,6 +39,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.picasso)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.material.v140)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
