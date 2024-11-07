@@ -98,7 +98,7 @@ class FormCadastro : AppCompatActivity() {
         }
     }
     private fun telaLogin() {
-        val intent = Intent(this, FormLogin::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, FormLogin::class.java))
+        finish()
     }
 }

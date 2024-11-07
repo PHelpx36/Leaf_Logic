@@ -8,11 +8,48 @@
     android:background="@drawable/background"
     tools:context=".ui.slideshow.SlideshowFragment">
 
+    <EditText
+        android:id="@+id/et_date"
+        style="@style/Edit_Text"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="252dp"
+        android:layout_marginBottom="12dp"
+        android:focusable="false"
+        android:hint="início"
+        android:inputType="none"
+        app:layout_constraintBottom_toTopOf="@+id/hist_chart"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/et_date2"
+        style="@style/Edit_Text"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="12dp"
+        android:focusable="false"
+        android:hint="Fim"
+        android:inputType="none"
+        ap:layout_constraintBottom_toTopOf="@+id/hist_chart"
+        app:layout_constraintStart_toEndOf="@+id/et_date" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        style="@style/Button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:text="teste"
+        android:drawableStart="@drawable/baseline_history_24"
+        tools:layout_editor_absoluteX="335dp"
+        tools:layout_editor_absoluteY="87dp"
+        tools:ignore="MissingConstraints" />
+
     <com.androidplot.xy.XYPlot
         android:id="@+id/hist_chart"
         style="@style/APDefacto.Light"
-        android:layout_width="378dp"
-        android:layout_height="588dp"
+        android:layout_width="396dp"
+        android:layout_height="552dp"
         ap:lineLabelRotationBottom="-45"
         ap:lineLabels="left|bottom"
         ap:title="Temperatura"

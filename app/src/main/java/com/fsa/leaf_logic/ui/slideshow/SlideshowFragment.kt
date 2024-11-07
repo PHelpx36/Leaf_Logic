@@ -1,5 +1,6 @@
 package com.fsa.leaf_logic.ui.slideshow
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.Calendar
 
 class SlideshowFragment : Fragment() {
 
@@ -40,6 +42,40 @@ class SlideshowFragment : Fragment() {
 
         _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.etDate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(), // Contexto
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    // Atualize o EditText com a data selecionada
+                    binding.etDate.setText("$selectedDay/${selectedMonth + 1}/$selectedYear")
+                },
+                year, month, day
+            )
+            datePickerDialog.show()
+        }
+
+        binding.etDate2.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(), // Contexto
+                { _, selectedYear, selectedMonth, selectedDay ->
+                    // Atualize o EditText com a data selecionada
+                    binding.etDate2.setText("$selectedDay/${selectedMonth + 1}/$selectedYear")
+                },
+                year, month, day
+            )
+            datePickerDialog.show()
+        }
 
         fetchLeituras()
 

@@ -137,6 +137,7 @@ class FormLogin : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java).apply {
             putExtra("user", user) // Passando o objeto User
         })
+        finish()
     }
 
     private fun telaCadastro() {

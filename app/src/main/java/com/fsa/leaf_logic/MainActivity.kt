@@ -2,6 +2,7 @@ package com.fsa.leaf_logic
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.fsa.leaf_logic.databinding.ActivityMainBinding
 
 @Suppress("DEPRECATION")
@@ -21,6 +23,7 @@ MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var view: ActivityMainBinding
+    private lateinit var imageViewHeader: ImageView
     private lateinit var userIdTextView: TextView
     private lateinit var userNameTextView: TextView
     private lateinit var userEmailTextView: TextView
@@ -28,12 +31,20 @@ MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val user: User? = intent.getSerializableExtra("user") as? User
+
+        val userViewModel: UserViewModel by viewModels()
+
+        user?.let {
+            userViewModel.userId.value = it.id.toString()
+            userViewModel.userName.value = it.nome
+            userViewModel.userEmail.value = it.email
+        }
+
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(view.root)
 
         setSupportActionBar(view.appBarMain.toolbar)
-
-        val user: User? = intent.getSerializableExtra("user") as? User
 
         view.appBarMain.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -44,6 +55,8 @@ MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = view.drawerLayout
         val navView: NavigationView = view.navView
         val headerView = navView.getHeaderView(0)
+
+        imageViewHeader = headerView.findViewById(R.id.imageView)
         userIdTextView = headerView.findViewById(R.id.user_id)
         userNameTextView = headerView.findViewById(R.id.user_name)
         userEmailTextView = headerView.findViewById(R.id.email_side)
@@ -53,14 +66,6 @@ MainActivity : AppCompatActivity() {
             userIdTextView.text = it.id.toString()
             userNameTextView.text = it.nome
             userEmailTextView.text = it.email
-        }
-
-        val userViewModel: UserViewModel by viewModels()
-
-        user?.let {
-            userViewModel.userId.value = it.id.toString()
-            userViewModel.userName.value = it.nome
-            userViewModel.userEmail.value = it.email
         }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)

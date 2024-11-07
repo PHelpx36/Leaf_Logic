@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.fsa.leaf_logic.PlantPagerAdapter
 import com.fsa.leaf_logic.Planta
@@ -33,8 +34,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -44,16 +43,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Use binding para acessar a View corretamente
-        binding.plusSign.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_home_to_nav_novaPlanta)
-        }
-
         val userViewModel: UserViewModel by activityViewModels()
 
         userViewModel.userId.value?.let { pesquisarPlantaPorUserId(it) }
-
-        notifications()
 
         return binding.root
     }
@@ -74,17 +66,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         ).show()
 
                         loadPlantas(response)
-
+                        binding.progressBar.visibility = View.GONE
+                        binding.textLoad.visibility = View.GONE
                     } else {
+                        binding.progressBar.visibility = View.GONE
+                        binding.textLoad.visibility = View.GONE
                         Toast.makeText(
                             requireContext(),
-                            "Nenhuma leitura encontrada",
+                            "Nenhuma planta foi encontrada!",
                             Toast.LENGTH_SHORT
                         ).show()
+                        loadbutton()
                     }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
+                    binding.progressBar.visibility = View.GONE
+                    binding.textLoad.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         "Erro de rede: ${e.message}",
@@ -92,12 +90,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     ).show()
                 }
             } catch (e: HttpException) {
+                binding.progressBar.visibility = View.GONE
+                binding.textLoad.visibility = View.GONE
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
-                loadbutton()
             } catch (e: Exception) {
+                binding.progressBar.visibility = View.GONE
+                binding.textLoad.visibility = View.VISIBLE
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Erro: ${e.message}", Toast.LENGTH_SHORT)
                         .show()
@@ -107,105 +108,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun loadbutton() {
-        binding.viewPager.visibility = View.GONE
         binding.nomePlanta.visibility = View.VISIBLE
-        binding.plusSign.visibility = View.VISIBLE // Certifique-se de que você tenha este ID
+        binding.plusSign.visibility = View.VISIBLE
 
-        // Configurar o clique no botão para ir para a tela de cadastro
         binding.plusSign.setOnClickListener {
-            // Navegar para a tela de cadastro (substitua com sua lógica de navegação)
             findNavController().navigate(R.id.action_nav_home_to_nav_novaPlanta)
         }
     }
 
     private fun loadPlantas(plantas: List<Planta>) {
-        if (plantas.isEmpty()) {
-            // Exibir o botão para cadastro
-            binding.viewPager.visibility = View.GONE
-            binding.nomePlanta.visibility = View.VISIBLE
-            binding.plusSign.visibility = View.VISIBLE // Certifique-se de que você tenha este ID
+        binding.viewPager.visibility = View.VISIBLE
+        binding.nextButton.visibility = View.VISIBLE
+        binding.prevButton.visibility = View.VISIBLE
 
-            // Configurar o clique no botão para ir para a tela de cadastro
-            binding.plusSign.setOnClickListener {
-                // Navegar para a tela de cadastro (substitua com sua lógica de navegação)
-                findNavController().navigate(R.id.action_nav_home_to_nav_novaPlanta)
-            }
-        } else {
-            // Ocultar o botão de cadastro
-            binding.nomePlanta.visibility = View.GONE
-            binding.plusSign.visibility = View.GONE
+        val navController = findNavController()
+        val adapter = PlantPagerAdapter(plantas, navController)
+        binding.viewPager.adapter = adapter
 
-            // Exibir o carrossel
-            val adapter = PlantPagerAdapter(plantas)
-            binding.viewPager.adapter = adapter
-
-            binding.nextButton.setOnClickListener {
-                if (binding.viewPager.currentItem < plantas.size - 1) {
-                    binding.viewPager.currentItem += 1
-                }
-            }
-
-            binding.prevButton.setOnClickListener {
-                if (binding.viewPager.currentItem > 0) {
-                    binding.viewPager.currentItem -= 1
-                }
+        binding.nextButton.setOnClickListener {
+            if (binding.viewPager.currentItem < plantas.size - 1) {
+                binding.viewPager.currentItem += 1
             }
         }
-    }
 
-
-
-    private fun notifications(){
-        val dynamicContainer = binding.dynamicContainer
-        // Adicionar componentes dinamicamente
-        for (i in 1..4) {
-            val textView = TextView(requireContext())
-
-            if(i != 4){
-                textView.apply {
-                    text = "Notification $i"
-                    textSize = 20f
-                    setTextColor(Color.WHITE)
-                    setBackgroundResource(R.drawable.retangular_shape)
-                    gravity = Gravity.CENTER
-                    setPadding(16, 8, 16, 8) // Padding para afastar o texto das bordas
-                }
-
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, // Largura total do contêiner
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 0, 0, 16) // Margem inferior para espaçamento entre componentes
-                }
-
-                textView.layoutParams = layoutParams
+        binding.prevButton.setOnClickListener {
+            if (binding.viewPager.currentItem > 0) {
+                binding.viewPager.currentItem -= 1
             }
-            else{
-                textView.apply {
-                    text = " Ver Histórico"
-                    textSize = 15f
-                    setTextColor(Color.WHITE)
-                    setBackgroundResource(R.drawable.button)
-                    gravity = Gravity.CENTER
-                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
-                    setPadding(25, 15, 25, 15) // Padding para afastar o texto das bordas
-                    setOnClickListener {
-                        findNavController().navigate(R.id.action_nav_home_to_nav_slideshow)
-                    }
-                }
-
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 20, 0, 16) // Margem inferior para espaçamento entre componentes
-                }
-
-                textView.layoutParams = layoutParams
-            }
-
-            // Adiciona os componentes ao LinearLayout
-            dynamicContainer.addView(textView)
         }
     }
 

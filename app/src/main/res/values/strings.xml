@@ -9,7 +9,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_novaPlanta">Nova Planta</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_charts">Gráficos</string>
 
     <string name="entrar">Entrar</string>
     <string name="cadastrar">Cadastrar</string>
@@ -29,4 +29,9 @@
     <string name="nova_planta_placeholder">Nova Planta</string>
     <string name="nome_do_vaso">Nome do Vaso</string>
     <string name="nome_encontrar_vaso">*Nome do encontrado na base do Vaso</string>
+    <string name="carregando_plantas">Carregando Plantas...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="atualizar">Atualizar</string>
+    <string name="atualizar_cadastro">Atualizar Cadastro</string>
 </resources>

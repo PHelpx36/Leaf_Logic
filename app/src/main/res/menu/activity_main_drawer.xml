@@ -7,15 +7,15 @@
 
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/baseline_home_24"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_novaPlanta"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/baseline_local_florist_24"
             android:title="@string/menu_novaPlanta" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_charts" />
     </group>
 </menu>
