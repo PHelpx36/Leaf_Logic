@@ -122,7 +122,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.prevButton.visibility = View.VISIBLE
 
         val navController = findNavController()
-        val adapter = PlantPagerAdapter(plantas, navController)
+        val adapter = PlantPagerAdapter(plantas, navController, requireContext())
         binding.viewPager.adapter = adapter
 
         binding.nextButton.setOnClickListener {

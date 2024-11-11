@@ -16,5 +16,6 @@
     <color name="opacity_text">#92FFFFFF</color>
     <color name="light_green">#7DC855</color>
     <color name="very_light_green">#C1D8B0</color>
+    <color name="dark_green">#548322</color>
     <color name="opac_green">#80AA71</color>
 </resources>

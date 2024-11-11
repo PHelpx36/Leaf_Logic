@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.androidplot.xy.XYPlot
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.androidplot.xy.LineAndPointFormatter
 import com.androidplot.xy.SimpleXYSeries
 import com.fsa.leaf_logic.Leitura
@@ -22,10 +23,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 class SlideshowFragment : Fragment() {
 
+    private val args: SlideshowFragmentArgs by navArgs()
     private var _binding: FragmentSlideshowBinding? = null
     private lateinit var myPlot : XYPlot
     private lateinit var leiturasOrganizadas : Leituras
@@ -43,6 +48,20 @@ class SlideshowFragment : Fragment() {
         _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        isoDateFormat.timeZone = TimeZone.getTimeZone("UTC") // Ajuste para UTC
+
+        val calendar2 = Calendar.getInstance()
+        calendar2.set(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH))
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        binding.etDate2.setText(dateFormat.format(calendar2.time))
+        var fim = isoDateFormat.format(calendar2.time)
+
+        calendar2.add(Calendar.DAY_OF_YEAR, -5)
+        binding.etDate.setText(dateFormat.format(calendar2.time))
+        var inicio = isoDateFormat.format(calendar2.time)
+
         binding.etDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
@@ -52,7 +71,8 @@ class SlideshowFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(), // Contexto
                 { _, selectedYear, selectedMonth, selectedDay ->
-                    // Atualize o EditText com a data selecionada
+                    calendar.set(selectedYear, selectedMonth, selectedDay)
+                    inicio = isoDateFormat.format(calendar.time)
                     binding.etDate.setText("$selectedDay/${selectedMonth + 1}/$selectedYear")
                 },
                 year, month, day
@@ -69,7 +89,8 @@ class SlideshowFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(), // Contexto
                 { _, selectedYear, selectedMonth, selectedDay ->
-                    // Atualize o EditText com a data selecionada
+                    calendar.set(selectedYear, selectedMonth, selectedDay)
+                    fim = isoDateFormat.format(calendar.time)
                     binding.etDate2.setText("$selectedDay/${selectedMonth + 1}/$selectedYear")
                 },
                 year, month, day
@@ -77,7 +98,11 @@ class SlideshowFragment : Fragment() {
             datePickerDialog.show()
         }
 
-        fetchLeituras()
+        fetchLeituras(args.equipamentoId, inicio, fim)
+
+        binding.button.setOnClickListener{
+            fetchLeituras(args.equipamentoId, inicio, fim)
+        }
 
         return root
     }
@@ -88,6 +113,8 @@ class SlideshowFragment : Fragment() {
             leiturasOrganizadas.Luminosidades.isNotEmpty()){
 
             myPlot = binding.histChart
+
+            myPlot.clear()
 
             val seriesXTemp = leiturasOrganizadas.Temperaturas.indices.map { it.toFloat() }
             val seriesYTemp = leiturasOrganizadas.Temperaturas.map { it.toFloat() }
@@ -155,11 +182,11 @@ class SlideshowFragment : Fragment() {
         }
     }
 
-    private fun fetchLeituras() {
+    private fun fetchLeituras(equipamentoId: String, inicio: String, fim: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Chama o endpoint da API para obter as leituras
-                val response = RetrofitClient.apiService.getLeiturasPorEquipamento("1")
+                val response = RetrofitClient.apiService.getLeiturasByEquipamentoNData(equipamentoId, inicio, fim)
 
                 withContext(Dispatchers.Main) {
                     if (response.isNotEmpty()) {

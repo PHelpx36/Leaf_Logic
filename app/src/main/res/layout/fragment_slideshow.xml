@@ -13,50 +13,54 @@
         style="@style/Edit_Text"
         android:layout_width="150dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="252dp"
-        android:layout_marginBottom="12dp"
         android:focusable="false"
         android:hint="início"
         android:inputType="none"
-        app:layout_constraintBottom_toTopOf="@+id/hist_chart"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hist_chart"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/et_date2"
         style="@style/Edit_Text"
         android:layout_width="150dp"
         android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginStart="4dp"
         android:focusable="false"
         android:hint="Fim"
         android:inputType="none"
-        ap:layout_constraintBottom_toTopOf="@+id/hist_chart"
-        app:layout_constraintStart_toEndOf="@+id/et_date" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/et_date"
+        app:layout_constraintTop_toBottomOf="@+id/hist_chart"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         style="@style/Button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:text="teste"
+        android:layout_width="214dp"
+        android:layout_height="54dp"
         android:drawableStart="@drawable/baseline_history_24"
-        tools:layout_editor_absoluteX="335dp"
-        tools:layout_editor_absoluteY="87dp"
+        android:text="@string/Pesquisar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_date"
         tools:ignore="MissingConstraints" />
 
     <com.androidplot.xy.XYPlot
         android:id="@+id/hist_chart"
         style="@style/APDefacto.Light"
-        android:layout_width="396dp"
-        android:layout_height="552dp"
+        android:layout_width="419dp"
+        android:layout_height="418dp"
         ap:lineLabelRotationBottom="-45"
         ap:lineLabels="left|bottom"
-        ap:title="Temperatura"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.888" />
+        app:layout_constraintVertical_bias="0.282" />
 </androidx.constraintlayout.widget.ConstraintLayout>

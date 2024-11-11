@@ -20,6 +20,27 @@
             app:destination="@id/nav_slideshow"
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_notification"
+            app:destination="@id/nav_notification"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_notification"
+        android:name="com.fsa.leaf_logic.ui.notifications.NotificationFragment"
+        android:label="@string/notification"
+        tools:layout="@layout/fragment_notification">
+
+        <argument
+            android:name="plantaId"
+            app:argType="string"
+            android:defaultValue="0" />
+
+        <argument
+            android:name="pendentes"
+            app:argType="int"
+            android:defaultValue="0" />
     </fragment>
 
     <fragment
@@ -38,5 +59,10 @@
         android:id="@+id/nav_slideshow"
         android:name="com.fsa.leaf_logic.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_charts"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_slideshow" >
+        <argument
+            android:name="equipamentoId"
+            app:argType="string"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

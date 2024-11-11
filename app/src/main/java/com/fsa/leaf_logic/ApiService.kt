@@ -10,6 +10,19 @@ import retrofit2.http.Path
 
 interface ApiService {
 
+    // ============ NOTIFICACOES ============
+    @GET("api/Notificacao/GetNotificacoesConcluidas/{plantaId}") // Rota da API
+    suspend fun getNotificacoesPorPlantaConcluida(
+        @Path("plantaId") plantaId: String
+    ): List<Notificacao>
+
+    @GET("api/Notificacao/GetNotificacoesPendentes/{plantaId}") // Rota da API
+    suspend fun getNotificacoesPorPlantaPendente(
+        @Path("plantaId") plantaId: String
+    ): List<Notificacao>
+
+    // ============ END NOTIFICACOES ============
+
     // ============ EQUIPAMENTOS ============
     @GET("api/Equipamento/GetEquip/{equipamentoName}") // Rota da API
     suspend fun getEquipamentoPorNome(
@@ -33,9 +46,11 @@ interface ApiService {
     @GET("api/Leitura") // Rota da API
     suspend fun getLeituras(): List<Leitura>
 
-    @GET("api/Leitura/{equipamentoId}") // Rota da API
-    suspend fun getLeiturasPorEquipamento(
-        @Path("equipamentoId") equipamentoId: String
+    @GET("api/Leitura/{equipamentoId}/{inicio}/{fim}")
+    suspend fun getLeiturasByEquipamentoNData(
+        @Path("equipamentoId") equipamentoId: String,
+        @Path("inicio") inicio: String, // Formato yyyy-MM-dd
+        @Path("fim") fim: String        // Formato yyyy-MM-dd
     ): List<Leitura>
 
     // ============ END LEITURAS ============

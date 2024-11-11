@@ -1,29 +1,42 @@
 package com.fsa.leaf_logic
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Bundle
 import android.util.Base64
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 class PlantPagerAdapter(
     private val plantas: List<Planta>,
-    private val navController: NavController // Passa o NavController aqui
+    private val navController: NavController,
+    private val context: Context
 ) : RecyclerView.Adapter<PlantPagerAdapter.PlantViewHolder>() {
 
     inner class PlantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nomePlanta: TextView = itemView.findViewById(R.id.nomePlanta)
         val imagemPlanta: ImageView = itemView.findViewById(R.id.imagemPlanta)
         val dynamicContainer: LinearLayout = itemView.findViewById(R.id.dynamicContainer)
+        val chartsNav: Button = itemView.findViewById(R.id.charts)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
@@ -47,58 +60,178 @@ class PlantPagerAdapter(
         holder.dynamicContainer.removeAllViews()
 
         // Chama a função notifications para adicionar notificações dinamicamente
-        notifications(holder.dynamicContainer)
+        getNotifications(planta.id.toString(), holder.dynamicContainer)
+
+        holder.chartsNav.setOnClickListener{
+            val bundle = Bundle().apply {
+                putString("plantaId", planta.equipamentoId.toString())
+            }
+            navController.navigate(R.id.action_nav_home_to_nav_slideshow, bundle)
+        }
     }
 
-    private fun notifications(dynamicContainer: LinearLayout) {
-        // Adiciona componentes dinamicamente ao dynamicContainer
-        for (i in 1..4) {
-            val textView = TextView(dynamicContainer.context)
+    private fun notifications(dynamicContainer: LinearLayout, notifications: List<Notificacao>, plantaId: String) {
+        var layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            setMargins(0, 0, 0, 16)
+        }
+        if(notifications.isNotEmpty()){
+            for (i in 0..2) {
+                val textView = TextView(dynamicContainer.context)
+                if(notifications.count() > i){
+                    textView.apply {
+                        text = notifications[i].dever
+                        textSize = 20f
+                        setTextColor(Color.WHITE)
+                        setBackgroundResource(R.drawable.retangular_shape)
+                        gravity = Gravity.CENTER
+                        setPadding(16, 8, 16, 8)
+                        setOnClickListener {
+                            // Infla o layout do pop-up
+                            val inflater = LayoutInflater.from(dynamicContainer.context)
+                            val popupView = inflater.inflate(R.layout.popup_notification, null)
 
-            if (i != 4) {
-                textView.apply {
-                    text = "Notification $i"
-                    textSize = 20f
-                    setTextColor(Color.WHITE)
-                    setBackgroundResource(R.drawable.retangular_shape)
-                    gravity = Gravity.CENTER
-                    setPadding(16, 8, 16, 8)
-                }
+                            // Cria o PopupWindow
+                            val popupWindow = PopupWindow(
+                                popupView,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                true // Permite fechar ao clicar fora
+                            )
 
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 0, 0, 16)
-                }
+                            val fadeInAnimation = AnimationUtils.loadAnimation(dynamicContainer.context, R.anim.fade_in)
+                            popupView.startAnimation(fadeInAnimation) // Aplica a animação ao pop-up
 
-                textView.layoutParams = layoutParams
-            } else {
-                textView.apply {
-                    text = " Ver Histórico"
-                    textSize = 15f
-                    setTextColor(Color.WHITE)
-                    setBackgroundResource(R.drawable.button)
-                    gravity = Gravity.CENTER
-                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
-                    setPadding(25, 15, 25, 15)
-                    setOnClickListener {
-                        navController.navigate(R.id.action_nav_home_to_nav_slideshow)
+                            // Define as informações da notificação
+                            val titleTextView = popupView.findViewById<TextView>(R.id.titleTextView)
+                            val messageTextView = popupView.findViewById<TextView>(R.id.messageTextView)
+                            titleTextView.text = "Notificação ${i + 1}"
+                            messageTextView.text = notifications[i].descricao // Ajuste conforme a estrutura da sua notificação
+
+                            // Botão de fechar o pop-up
+                            val closeButton = popupView.findViewById<Button>(R.id.closeButton)
+                            closeButton.setOnClickListener {
+                                popupWindow.dismiss()
+                            }
+
+                            // Exibe o pop-up no centro da tela
+                            popupWindow.showAtLocation(dynamicContainer, Gravity.CENTER, 0, 0)
+                        }
+
+                        textView.layoutParams = layoutParams
                     }
                 }
 
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 20, 0, 16)
+                if(i == 2){
+                    textView.apply {
+                        text = " Ver Histórico"
+                        textSize = 15f
+                        setTextColor(Color.WHITE)
+                        setBackgroundResource(R.drawable.button)
+                        gravity = Gravity.CENTER
+                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
+                        setPadding(25, 15, 25, 15)
+                        setOnClickListener {
+                            val bundle = Bundle().apply {
+                                putString("plantaId", plantaId)
+                                putInt("pendentes", notifications.size)
+                            }
+
+                            navController.navigate(R.id.action_nav_home_to_nav_notification, bundle)
+                        }
+                    }
+
+                    textView.layoutParams = layoutParams
                 }
 
-                textView.layoutParams = layoutParams
+                dynamicContainer.addView(textView)
+            }
+        }else{
+            val textView = TextView(dynamicContainer.context)
+
+            textView.apply {
+                text = "Tudo em dia!"
+                textSize = 20f
+                setTextColor(Color.WHITE)
+                setBackgroundResource(R.drawable.retangular_shape)
+                gravity = Gravity.CENTER
+                setPadding(16, 8, 16, 8)
             }
 
-            // Adiciona o TextView ao dynamicContainer
+            textView.layoutParams = layoutParams
+
             dynamicContainer.addView(textView)
+
+            textView.apply {
+                text = " Ver Histórico"
+                textSize = 15f
+                setTextColor(Color.WHITE)
+                setBackgroundResource(R.drawable.button)
+                gravity = Gravity.CENTER
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
+                setPadding(25, 15, 25, 15)
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putString("plantaId", plantaId)
+                        putInt("pendentes", notifications.size)
+                    }
+
+                    navController.navigate(R.id.action_nav_home_to_nav_notification, bundle)
+                }
+            }
+
+            textView.layoutParams = layoutParams
+
+            dynamicContainer.addView(textView)
+        }
+    }
+
+    private fun getNotifications(plantaId: String, dynamicContainer: LinearLayout){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.apiService.getNotificacoesPorPlantaPendente(plantaId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isNotEmpty()) {
+                        // Exibe uma mensagem de sucesso
+                        Toast.makeText(
+                            context,
+                            "Notificações obtidas com sucesso!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        notifications(dynamicContainer, response, plantaId)
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Nenhuma notificações encontrada",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        notifications(dynamicContainer, response, plantaId)
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Erro de rede: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
         }
     }
 
