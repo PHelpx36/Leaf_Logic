@@ -40,8 +40,8 @@ class NotificationFragment : Fragment() {
         val plantaId = args.plantaId
 
         binding.plantName.text = args.plantaNome
-        binding.placarPendentes.text = args.pendentes
         getPendingNotifications(plantaId)
+        getConcluidasNotifications(plantaId)
 
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
@@ -62,6 +62,45 @@ class NotificationFragment : Fragment() {
     }
 
     private fun getPendingNotifications(plantaId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.apiService.getNotificacoesPorPlantaConcluida(plantaId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isNotEmpty()) {
+                        binding.placarPendentes.text = response.size.toString()
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Nenhuma notificação concluída.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Erro de rede: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun getConcluidasNotifications(plantaId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitClient.apiService.getNotificacoesPorPlantaConcluida(plantaId)

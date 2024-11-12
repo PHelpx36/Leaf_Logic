@@ -35,4 +35,6 @@
     <string name="atualizar">Atualizar</string>
     <string name="atualizar_cadastro">Atualizar Cadastro</string>
     <string name="notification">Notificação</string>
+    <string name="dicas_esp_cies">Dicas Espécies</string>
+    <string name="buscar">Buscar</string>
 </resources>

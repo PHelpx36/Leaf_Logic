@@ -9,6 +9,18 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
+    // ============ DICAS ============
+    @GET("api/Hint/{especie}") // Rota da API
+    suspend fun getHintPorEspecie(
+        @Path("especie") especie: String
+    ): Hint
+
+    @GET("api/Hint/getHintImagens/{id}") // Rota da API
+    suspend fun getHintImagens(
+        @Path("id") id: String
+    ): List<HintImagem>
+
+    // ============ END DICAS ============
 
     // ============ NOTIFICACOES ============
     @GET("api/Notificacao/GetNotificacoesConcluidas/{plantaId}") // Rota da API

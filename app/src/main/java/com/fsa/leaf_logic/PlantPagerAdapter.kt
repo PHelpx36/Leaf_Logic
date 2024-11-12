@@ -87,7 +87,7 @@ class PlantPagerAdapter(
         }
 
         if(notifications.isNotEmpty()){
-            for (i in 0..2) {
+            for (i in 0..3) {
                 val textView = TextView(dynamicContainer.context)
                 if(notifications.count() > i){
                     textView.apply {
@@ -131,34 +131,33 @@ class PlantPagerAdapter(
                         }
 
                         textView.layoutParams = layoutParams
+
+                        dynamicContainer.addView(textView)
                     }
                 }
-
-                if(i == 2){
-                    textView.apply {
-                        text = " Ver Histórico"
-                        textSize = 15f
-                        setTextColor(Color.WHITE)
-                        setBackgroundResource(R.drawable.button)
-                        gravity = Gravity.CENTER
-                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
-                        setPadding(25, 15, 25, 15)
-                        setOnClickListener {
-                            val bundle = Bundle().apply {
-                                putString("plantaId", plantaId)
-                                putString("plantaNome", plantaNome)
-                                putString("pendentes", notifications.size.toString())
-                            }
-
-                            navController.navigate(R.id.action_nav_home_to_nav_notification, bundle)
-                        }
-                    }
-
-                    textView.layoutParams = specialLayoutParams
-                }
-
-                dynamicContainer.addView(textView)
             }
+            val textView = TextView(dynamicContainer.context)
+            textView.apply {
+                text = " Ver Histórico"
+                textSize = 15f
+                setTextColor(Color.WHITE)
+                setBackgroundResource(R.drawable.button)
+                gravity = Gravity.CENTER
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_history_24, 0, 0, 0)
+                setPadding(25, 15, 25, 15)
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putString("plantaId", plantaId)
+                        putString("plantaNome", plantaNome)
+                        putString("pendentes", notifications.size.toString())
+                    }
+
+                    navController.navigate(R.id.action_nav_home_to_nav_notification, bundle)
+                }
+            }
+
+            textView.layoutParams = specialLayoutParams
+            dynamicContainer.addView(textView)
         }else{
             val textView = TextView(dynamicContainer.context)
 
@@ -182,7 +181,9 @@ class PlantPagerAdapter(
             textView.layoutParams = fullWidthLayoutParams
             dynamicContainer.addView(textView)
 
-            textView.apply {
+            val textView2 = TextView(dynamicContainer.context)
+
+            textView2.apply {
                 text = " Ver Histórico"
                 textSize = 15f
                 setTextColor(Color.WHITE)
@@ -199,9 +200,9 @@ class PlantPagerAdapter(
                 }
             }
 
-            textView.layoutParams = specialLayoutParams
+            textView2.layoutParams = specialLayoutParams
 
-            dynamicContainer.addView(textView)
+            dynamicContainer.addView(textView2)
         }
     }
 
