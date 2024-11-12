@@ -1,8 +1,12 @@
 package com.fsa.leaf_logic
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
@@ -25,31 +29,52 @@ class NotificationAdapter(private var notifications: List<Notificacao>) :
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
         val notification = notifications[position]
 
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-
         try {
-            val date = inputFormat.parse(notification.dataEmissicao)
-            holder.notificationDate.text = outputFormat.format(date)
+            val date = formatIsoDateString(notification.dataEmissicao)
+            holder.notificationDate.text = date
         } catch (e: Exception) {
             e.printStackTrace()
             holder.notificationDate.text = notification.dataEmissicao
         }
 
         holder.notificationText.text = notification.descricao
+
+        holder.itemView.setOnClickListener {
+            val inflater = LayoutInflater.from(holder.itemView.context)
+            val popupView = inflater.inflate(R.layout.popup_notification, null)
+
+            val popupWindow = PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+
+            val fadeInAnimation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.fade_in)
+            popupView.startAnimation(fadeInAnimation)
+
+            val titleTextView = popupView.findViewById<TextView>(R.id.titleTextView)
+            val messageTextView = popupView.findViewById<TextView>(R.id.messageTextView)
+            titleTextView.text = "Notificação ${position + 1}"
+            messageTextView.text = notification.descricao
+
+            val closeButton = popupView.findViewById<Button>(R.id.closeButton)
+
+            if(notification.concluida == "True"){
+                closeButton.text = "Já Concluída!"
+            }else{
+                closeButton.setOnClickListener {
+                    popupWindow.dismiss()
+                }
+            }
+            popupWindow.showAtLocation(holder.itemView, Gravity.CENTER, 0, 0)
+        }
     }
 
     fun formatIsoDateString(dateString: String): String {
-        // Formato de entrada (ISO 8601 com milissegundos e "T" entre data e hora)
         val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
-
-        // Formato de saída desejado
         val outputDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-
-        // Converte a string de data recebida para um objeto Date
         val date: Date? = inputDateFormat.parse(dateString)
-
-        // Formata o objeto Date no novo formato
         return if (date != null) {
             outputDateFormat.format(date)
         } else {

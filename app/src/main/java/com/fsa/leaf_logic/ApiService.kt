@@ -21,6 +21,11 @@ interface ApiService {
         @Path("plantaId") plantaId: String
     ): List<Notificacao>
 
+    @PUT("api/Notificacao/concluirNotificacao/{id}") // Rota da API
+    suspend fun concluirNotificacao(
+        @Path("id") id: String
+    ): Response<Notificacao>
+
     // ============ END NOTIFICACOES ============
 
     // ============ EQUIPAMENTOS ============

@@ -60,23 +60,32 @@ class PlantPagerAdapter(
         holder.dynamicContainer.removeAllViews()
 
         // Chama a função notifications para adicionar notificações dinamicamente
-        getNotifications(planta.id.toString(), holder.dynamicContainer)
+        getNotifications(planta.id.toString(), holder.dynamicContainer, planta.nome)
 
         holder.chartsNav.setOnClickListener{
             val bundle = Bundle().apply {
-                putString("plantaId", planta.equipamentoId.toString())
+                putString("equipamentoId", planta.equipamentoId.toString())
             }
             navController.navigate(R.id.action_nav_home_to_nav_slideshow, bundle)
         }
     }
 
-    private fun notifications(dynamicContainer: LinearLayout, notifications: List<Notificacao>, plantaId: String) {
+    private fun notifications(dynamicContainer: LinearLayout, notifications: List<Notificacao>, plantaId: String, plantaNome: String) {
         var layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
             setMargins(0, 0, 0, 16)
         }
+
+        val specialLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            setMargins(0, 16, 0, 16) // ajuste de margens conforme necessário
+            gravity = Gravity.CENTER_HORIZONTAL // centraliza horizontalmente no LinearLayout
+        }
+
         if(notifications.isNotEmpty()){
             for (i in 0..2) {
                 val textView = TextView(dynamicContainer.context)
@@ -113,6 +122,7 @@ class PlantPagerAdapter(
                             // Botão de fechar o pop-up
                             val closeButton = popupView.findViewById<Button>(R.id.closeButton)
                             closeButton.setOnClickListener {
+                                ConcluirNotificacao(notifications[i].id.toString(), textView, dynamicContainer)
                                 popupWindow.dismiss()
                             }
 
@@ -136,14 +146,15 @@ class PlantPagerAdapter(
                         setOnClickListener {
                             val bundle = Bundle().apply {
                                 putString("plantaId", plantaId)
-                                putInt("pendentes", notifications.size)
+                                putString("plantaNome", plantaNome)
+                                putString("pendentes", notifications.size.toString())
                             }
 
                             navController.navigate(R.id.action_nav_home_to_nav_notification, bundle)
                         }
                     }
 
-                    textView.layoutParams = layoutParams
+                    textView.layoutParams = specialLayoutParams
                 }
 
                 dynamicContainer.addView(textView)
@@ -151,17 +162,24 @@ class PlantPagerAdapter(
         }else{
             val textView = TextView(dynamicContainer.context)
 
+            val fullWidthLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                200 // altura maior; ajuste conforme necessário
+            ).apply {
+                setMargins(0, 16, 0, 16) // margens conforme necessário
+            }
+
             textView.apply {
                 text = "Tudo em dia!"
                 textSize = 20f
                 setTextColor(Color.WHITE)
-                setBackgroundResource(R.drawable.retangular_shape)
-                gravity = Gravity.CENTER
-                setPadding(16, 8, 16, 8)
+                setBackgroundColor(Color.parseColor("#006400")) // verde escuro
+                gravity = Gravity.CENTER // centraliza o texto no meio do TextView
+                setPadding(16, 8, 16, 8) // ajuste do padding conforme necessário
             }
 
-            textView.layoutParams = layoutParams
-
+            // Aplica o layoutParams específico para largura total e altura maior
+            textView.layoutParams = fullWidthLayoutParams
             dynamicContainer.addView(textView)
 
             textView.apply {
@@ -175,20 +193,19 @@ class PlantPagerAdapter(
                 setOnClickListener {
                     val bundle = Bundle().apply {
                         putString("plantaId", plantaId)
-                        putInt("pendentes", notifications.size)
                     }
 
                     navController.navigate(R.id.action_nav_home_to_nav_notification, bundle)
                 }
             }
 
-            textView.layoutParams = layoutParams
+            textView.layoutParams = specialLayoutParams
 
             dynamicContainer.addView(textView)
         }
     }
 
-    private fun getNotifications(plantaId: String, dynamicContainer: LinearLayout){
+    private fun getNotifications(plantaId: String, dynamicContainer: LinearLayout, plantaNome: String){
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitClient.apiService.getNotificacoesPorPlantaPendente(plantaId)
@@ -202,7 +219,7 @@ class PlantPagerAdapter(
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        notifications(dynamicContainer, response, plantaId)
+                        notifications(dynamicContainer, response, plantaId, plantaNome)
 
                     } else {
                         Toast.makeText(
@@ -210,7 +227,7 @@ class PlantPagerAdapter(
                             "Nenhuma notificações encontrada",
                             Toast.LENGTH_SHORT
                         ).show()
-                        notifications(dynamicContainer, response, plantaId)
+                        notifications(dynamicContainer, response, plantaId, plantaNome)
                     }
                 }
             } catch (e: IOException) {
@@ -233,6 +250,57 @@ class PlantPagerAdapter(
                 }
             }
         }
+    }
+
+    private fun ConcluirNotificacao(notificationId: String, textView: TextView, dynamicContainer: LinearLayout){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.apiService.concluirNotificacao(notificationId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        // Exibe uma mensagem de sucesso
+                        Toast.makeText(
+                            context,
+                            "Notificações concluída com sucesso!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        apagarComponenteNotificacao(textView, dynamicContainer)
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Erro, não foi possivel completar essa ação.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Erro de rede: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun apagarComponenteNotificacao(textView: TextView, dynamicContainer: LinearLayout) {
+        // Remover o TextView do layout
+        dynamicContainer.removeView(textView)
     }
 
     private fun carregarImagemBase64(base64String: String) : Bitmap? {

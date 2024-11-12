@@ -36,10 +36,13 @@
             android:name="plantaId"
             app:argType="string"
             android:defaultValue="0" />
-
+        <argument
+            android:name="plantaNome"
+            app:argType="string"
+            android:defaultValue="0" />
         <argument
             android:name="pendentes"
-            app:argType="int"
+            app:argType="string"
             android:defaultValue="0" />
     </fragment>
 

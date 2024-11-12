@@ -30,7 +30,9 @@ import java.util.TimeZone
 
 class SlideshowFragment : Fragment() {
 
-    private val args: SlideshowFragmentArgs by navArgs()
+    private val equipamentoId: String by lazy {
+        requireArguments().getString("equipamentoId") ?: ""
+    }
     private var _binding: FragmentSlideshowBinding? = null
     private lateinit var myPlot : XYPlot
     private lateinit var leiturasOrganizadas : Leituras
@@ -98,10 +100,10 @@ class SlideshowFragment : Fragment() {
             datePickerDialog.show()
         }
 
-        fetchLeituras(args.equipamentoId, inicio, fim)
+        fetchLeituras(equipamentoId, inicio, fim)
 
         binding.button.setOnClickListener{
-            fetchLeituras(args.equipamentoId, inicio, fim)
+            fetchLeituras(equipamentoId, inicio, fim)
         }
 
         return root

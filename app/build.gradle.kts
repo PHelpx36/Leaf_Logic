@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.fragment.ktx.v260)
+    implementation(libs.androidx.navigation.ui.ktx.v260)
     implementation(libs.picasso)
     implementation(libs.androidx.viewpager2)
     implementation(libs.material.v140)

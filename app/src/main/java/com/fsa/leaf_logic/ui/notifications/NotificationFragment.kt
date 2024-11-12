@@ -4,11 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.fsa.leaf_logic.NotificationPagerAdapter
+import com.fsa.leaf_logic.RetrofitClient
 import com.fsa.leaf_logic.databinding.FragmentNotificationBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 class NotificationFragment : Fragment() {
 
@@ -30,7 +38,10 @@ class NotificationFragment : Fragment() {
         val root: View = binding.root
 
         val plantaId = args.plantaId
-        val pendentes = args.pendentes
+
+        binding.plantName.text = args.plantaNome
+        binding.placarPendentes.text = args.pendentes
+        getPendingNotifications(plantaId)
 
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
@@ -48,6 +59,45 @@ class NotificationFragment : Fragment() {
         }.attach()
 
         return root
+    }
+
+    private fun getPendingNotifications(plantaId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.apiService.getNotificacoesPorPlantaConcluida(plantaId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isNotEmpty()) {
+                        binding.placarConcluidas.text = response.size.toString()
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Nenhuma notificação concluída.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Erro de rede: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro HTTP: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Erro: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

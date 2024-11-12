@@ -7,17 +7,58 @@
     android:fillViewport="true"
     android:background="@drawable/background"
     tools:context=".ui.notifications.NotificationFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Título grande com o nome da planta -->
+
+        <!-- Placar de notificações -->
+        <TextView
+            android:id="@+id/plant_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:gravity="center"
+            android:text="Nome da Planta"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <!-- TabLayout para as abas -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Notificações Pendentes -->
+            <TextView
+                android:id="@+id/placar_pendentes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pendentes: 0"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <!-- Notificações Concluídas -->
+            <TextView
+                android:id="@+id/placar_concluidas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Concluídas: 0"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="250dp"
+            android:layout_marginTop="110dp"
             android:background="@color/very_light_green"
             android:contentDescription="@string/BemVindo" />
 
